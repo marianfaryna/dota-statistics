@@ -45,6 +45,11 @@
                 <artifactId>jackson-module-scala_2.11</artifactId>
                 <version>${jackson.scala.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
