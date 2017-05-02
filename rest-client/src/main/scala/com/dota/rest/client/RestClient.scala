@@ -16,8 +16,8 @@ class RestClient {
 
 object RestClient {
   var latestMatchId :String = "" //start_at_match_id=${match_id}
+  var steamKey :String = ""
 
-  val DOTA_KEY = "34DE638F08E3997DEF092DF09C1C5090"
   val START_AT_MATCH_ID = "?start_at_match_id="
   val DOTA_BASIC_REST_URL = "https://api.steampowered.com/IDOTA2Match_570/"
   val DOTA_ECON_BASIC_REST_URL = "https://api.steampowered.com/IEconDOTA2_570/"
@@ -33,9 +33,9 @@ object RestClient {
     var matchesUrl: String = ""
 
     if(StringUtils.isEmpty(latestMatchId)) {
-      matchesUrl = String.format(MATCH_HISTORY_URL, DOTA_KEY)
+      matchesUrl = String.format(MATCH_HISTORY_URL, steamKey)
     } else {
-      matchesUrl = String.format(MATCH_HISTORY_URL_START_AT, DOTA_KEY, latestMatchId)
+      matchesUrl = String.format(MATCH_HISTORY_URL_START_AT, steamKey, latestMatchId)
     }
 
     val target = client.target(matchesUrl)
@@ -50,7 +50,7 @@ object RestClient {
 
   def getMatchHistory(matchId : Long): Match = {
     val client = ClientBuilder.newBuilder().build()
-    val target = client.target(String.format(MATCH_DETAILS_URL, matchId.toString, DOTA_KEY))
+    val target = client.target(String.format(MATCH_DETAILS_URL, matchId.toString, steamKey))
     val response = target.request().get()
 
     val mapper = new ObjectMapper()
@@ -63,7 +63,7 @@ object RestClient {
 
 def getGameItems: List[Item] = {
   val client = ClientBuilder.newBuilder().build()
-  val target = client.target(String.format(ITEMS_URL, DOTA_KEY))
+  val target = client.target(String.format(ITEMS_URL, steamKey))
   val response = target.request().get()
 
   val mapper = new ObjectMapper()
@@ -75,7 +75,7 @@ def getGameItems: List[Item] = {
 
   def getGameHeroes: List[Hero] = {
     val client = ClientBuilder.newBuilder().build()
-    val target = client.target(String.format(HEROES_URL, DOTA_KEY))
+    val target = client.target(String.format(HEROES_URL, steamKey))
     val response = target.request().get()
 
     val mapper = new ObjectMapper()
