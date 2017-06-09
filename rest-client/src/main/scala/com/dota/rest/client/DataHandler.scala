@@ -1,41 +1,62 @@
 package com.dota.rest.client
 
+import java.util.concurrent.TimeUnit
+
+import com.dota.rest.entity.Player
+import com.dota.rest.entity.matches.Match
+import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.{Completed, _}
 
-class DataHandler {
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
+class DataHandler {
+//ask about constructor params that are accesible from object
 }
 
 object DataHandler {
-  def put(id: Int, value:String): Unit = {
 
-    val client: MongoClient = MongoClient("mongodb://admins-MacBook-Pro.local:27017/") //the acrtual host name of parent machine
+  def prepareDocument(matchToPersist: Match): Document = {
+    Document("_id" -> matchToPersist.matchId,
+      "radiantWin" -> matchToPersist.radiantWin,
+      "duration" -> matchToPersist.duration,
+      "startTime" -> matchToPersist.startTime,
+      "gameMode" -> matchToPersist.gameMode,
+      "direScore" -> matchToPersist.direScore,
+      "players" -> preparePlayersDocument(matchToPersist.players))
+  }
 
-    val listNamesObservable: Observable[String] = client.listDatabaseNames()
+  def preparePlayersDocument(players: List[Player]): List[Document] = {
+    var playersList = List[Document]()
+    for (player <- players) {
+      player.defineSide()
+      playersList = playersList :+ Document("accountId" -> player.accountId,
+        "heroId" -> player.heroId,
+        "kills" -> player.kills,
+        "deaths" -> player.deaths,
+        "assists" -> player.assists,
+        "denies" -> player.denies,
+        "goldPerMinute" -> player.goldPerMinute,
+        "xpPerMinute" -> player.xpPerMinute,
+        "level" -> player.level,
+        "heroDamage" -> player.heroDamage,
+        "heroHealing" -> player.heroHealing,
+        "goldCurrent" -> player.goldCurrent,
+        "goldSpent" -> player.goldSpent,
+        "isDire" -> player.isDire
+      )
+    }
+    playersList
+  }
 
-    listNamesObservable.subscribe(new Observer[String] {
-
-      override def onError(e: Throwable): Unit = println(s"onError listNamesObservable: $e")
-      override def onComplete(): Unit = println("listNamesObservable onComplete")
-      override def onNext(result: String): Unit = println(s"onNext listNamesObservable: $result")
-    })
-
-    println("==========> BEFORE PUT")
-    println("==========> id")
-    println(id)
-    println("==========> value")
-    println(value)
+  def put(matchToPersist: Match): Unit = {
+    val client: MongoClient = MongoClient("mongodb://localhost:27017") //the actual host name of parent machine
 
     val database = client.getDatabase("local")
     val collection: MongoCollection[Document] = database.getCollection("test_collection")
-    Thread.sleep(5000)
-    val document: Document = Document("_id" -> id, "value" -> value)
-    val insertObservable: Observable[Completed] = collection.insertOne(document)
-    Thread.sleep(5000)
-    insertObservable.subscribe(new Observer[Completed] {
-      override def onNext(result: Completed): Unit = println(s"onNext insertObservable: $result")
-      override def onError(e: Throwable): Unit = println(s"onError insertObservable: $e")
-      override def onComplete(): Unit = println("insertObservable onComplete")
-    })
+    val documentToPersist = prepareDocument(matchToPersist)
+    val insertObservable = collection.insertOne(documentToPersist)
+    Await.result(insertObservable.toFuture(), Duration(10, TimeUnit.SECONDS))
   }
 }
+

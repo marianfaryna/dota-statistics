@@ -10,6 +10,8 @@ class Player {
    var accountId : Long = 0L
   @JsonProperty("hero_id")
    var heroId : Long = 0L
+  @JsonProperty("player_slot")
+  var slot : Int = 0
   var kills: Int = 0
   var deaths: Int = 0
   var assists: Int = 0
@@ -28,6 +30,7 @@ class Player {
   @JsonProperty("gold_spent")
   var goldSpent: Int = 0
   @JsonProperty("item_0")
+  //TODO persist items into mongo
   var itemOne: Int = 0
   @JsonProperty("item_1")
   var itemTwo: Int = 0
@@ -41,4 +44,10 @@ class Player {
   var itemSix: Int = 0
   @JsonProperty("ability_upgrades")
   var abilityUpgrades: List[AbilityMeta] = List()
+
+  var isDire: Boolean = false
+
+  def defineSide(): Unit = {
+    this.isDire = this.slot >= 128
+  }
 }

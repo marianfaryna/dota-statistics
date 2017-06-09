@@ -7,9 +7,10 @@ object Main extends App {
 
 
   val client = RestClient
+  val dataHandler = DataHandler
   client.steamKey = DOTA_KEY
 
-  for( i <- 1 to 10) {
+//  for( i <- 1 to 10) {
 
     val restResponse = client.getMatches
 //    println("=======> REST RESPONSE")
@@ -18,11 +19,14 @@ object Main extends App {
         println("=======> MATCHES SIZE : " + restResponse.matches.length)
 
     var latestId: String = ""
-    for (playedMatch <- restResponse.matches) {
+//    for (playedMatch <- restResponse.matches) {
 
 
-//      val matchDetails = client.getMatchHistory(playedMatch.matchId)
-//      println("=======> REST RESPONSE")
+      val matchDetails = client.getMatchHistory(restResponse.matches.head.matchId)
+      println("=======> REST RESPONSE")
+      dataHandler.put(matchDetails)
+      println("=======> FUCK YEAH! ")
+//      println("=======> " + matchDetails)
 //      println(matchDetails.matchId)
 //      println(matchDetails.gameMode)
 //      println("=======> KILLS")
@@ -50,11 +54,12 @@ object Main extends App {
 //        println(matchDetails.players.head.abilityUpgrades.head.level)
 //        println(matchDetails.players.head.abilityUpgrades.head.time)
 //      }
-      println("=======> MATCH ID " + playedMatch.matchId)
-      latestId = String.valueOf(playedMatch.matchId)
-    }
-    client.latestMatchId = latestId
-  }
+//      println("=======> MATCH ID " + playedMatch.matchId)
+//      latestId = String.valueOf(playedMatch.matchId)
+
+//    }
+//    client.latestMatchId = latestId
+//  }
 //  println("=======> ITEMS")
 //  val restItemsResponse = client.getGameItems
 //    println("=======> REST RESPONSE")
