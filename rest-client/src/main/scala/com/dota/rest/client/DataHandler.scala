@@ -4,8 +4,9 @@ import java.util.concurrent.TimeUnit
 
 import com.dota.rest.entity.Player
 import com.dota.rest.entity.matches.Match
+import org.mongodb.scala._
 import org.mongodb.scala.bson.collection.immutable.Document
-import org.mongodb.scala.{Completed, _}
+import org.mongodb.scala.model.Filters._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -15,6 +16,10 @@ class DataHandler {
 }
 
 object DataHandler {
+  val client: MongoClient = MongoClient("mongodb://localhost:27017") //the actual host name of parent machine
+
+  val database = client.getDatabase("local")
+  val collection: MongoCollection[Document] = database.getCollection("test_collection")
 
   def prepareDocument(matchToPersist: Match): Document = {
     Document("_id" -> matchToPersist.matchId,
@@ -50,13 +55,16 @@ object DataHandler {
   }
 
   def put(matchToPersist: Match): Unit = {
-    val client: MongoClient = MongoClient("mongodb://localhost:27017") //the actual host name of parent machine
+    val findObservable = collection.find(equal("_id", matchToPersist.matchId)).first()
 
-    val database = client.getDatabase("local")
-    val collection: MongoCollection[Document] = database.getCollection("test_collection")
-    val documentToPersist = prepareDocument(matchToPersist)
-    val insertObservable = collection.insertOne(documentToPersist)
-    Await.result(insertObservable.toFuture(), Duration(10, TimeUnit.SECONDS))
+    val foundDocument = Await.result(findObservable.toFuture(), Duration(10, TimeUnit.SECONDS))
+    if(foundDocument.isEmpty) {
+      val documentToPersist = prepareDocument(matchToPersist)
+      val insertObservable = collection.insertOne(documentToPersist)
+      Await.result(insertObservable.toFuture(), Duration(10, TimeUnit.SECONDS))
+    }
+
+
   }
 }
 
