@@ -3,7 +3,7 @@ package com.dota.rest.client
 class Main {}
 
 object Main extends App {
-  val DotaKey = "34DE638F08E3997DEF092DF09C1C5090"
+  val DotaKey = Configuration.getValue("rest.dota.key")
 
   val client = RestClient
   val dataHandler = DataHandler
