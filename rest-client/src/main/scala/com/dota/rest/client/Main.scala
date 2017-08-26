@@ -3,16 +3,15 @@ package com.dota.rest.client
 class Main {}
 
 object Main extends App {
-  val DOTA_KEY = "34DE638F08E3997DEF092DF09C1C5090"
-
+  val DotaKey = "34DE638F08E3997DEF092DF09C1C5090"
 
   val client = RestClient
   val dataHandler = DataHandler
-  client.steamKey = DOTA_KEY
+  client.steamKey = DotaKey
 
   var counter: Int = 0
 
-  while (counter < 10000) {
+  while (counter < Configuration.getIntValue(Configuration.BatchSize)) {
 
     val restResponse = client.getMatches
     var latestId : String = ""
@@ -25,4 +24,6 @@ object Main extends App {
     }
     client.LatestMatchId = latestId
   }
+
+
 }
