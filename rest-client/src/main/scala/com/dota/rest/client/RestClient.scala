@@ -15,27 +15,20 @@ class RestClient {
 }
 
 object RestClient {
-  var latestMatchId :String = "" //start_at_match_id=${match_id}
-  var steamKey :String = ""
+  var LatestMatchId :String = _ //start_at_match_id=${match_id}
 
-  val START_AT_MATCH_ID = "?start_at_match_id="
-  val DOTA_BASIC_REST_URL = "https://api.steampowered.com/IDOTA2Match_570/"
-  val DOTA_ECON_BASIC_REST_URL = "https://api.steampowered.com/IEconDOTA2_570/"
-  val MATCH_HISTORY_URL = DOTA_BASIC_REST_URL + "GetMatchHistory/V001/?key=%s"
-  val MATCH_HISTORY_URL_START_AT = DOTA_BASIC_REST_URL + "GetMatchHistory/V001/?key=%s&start_at_match_id=%s"
-  val MATCH_DETAILS_URL = DOTA_BASIC_REST_URL +"GetMatchDetails/V001/?match_id=%s&key=%s"
-  val ITEMS_URL = DOTA_ECON_BASIC_REST_URL + "GetGameItems/V001/?key=%s"
-  val HEROES_URL = DOTA_ECON_BASIC_REST_URL + "GetHeroes/V001/?key=%s"
-  val ABILITIES_URL = "https://github.com/kronusme/dota2-api/blob/master/data/abilities.json"
+  var steamKey :String = _
 
   def getMatches: Result = {
     val client = ClientBuilder.newBuilder().build()
-    var matchesUrl: String = ""
-
-    if(StringUtils.isEmpty(latestMatchId)) {
-      matchesUrl = String.format(MATCH_HISTORY_URL, steamKey)
+      var matchesUrl: String = ""
+//todo don't use var at all atleast try to do this
+    // ""== latestMatchId
+//    s"bla bla $matchesUrl"
+    if(StringUtils.isEmpty(LatestMatchId)) {
+      matchesUrl = String.format(Constants.RestMatchHistoryUrl, steamKey)
     } else {
-      matchesUrl = String.format(MATCH_HISTORY_URL_START_AT, steamKey, latestMatchId)
+      matchesUrl = String.format(Constants.RestMatchHistoryUrlStartAt, steamKey, LatestMatchId)
     }
 
     val target = client.target(matchesUrl)
@@ -50,7 +43,7 @@ object RestClient {
 
   def getMatchHistory(matchId : Long): Match = {
     val client = ClientBuilder.newBuilder().build()
-    val target = client.target(String.format(MATCH_DETAILS_URL, matchId.toString, steamKey))
+    val target = client.target(String.format(Constants.RestMatchDetailsUrl, matchId.toString, steamKey))
     val response = target.request().get()
 
     val mapper = new ObjectMapper()
@@ -63,7 +56,7 @@ object RestClient {
 
 def getGameItems: List[Item] = {
   val client = ClientBuilder.newBuilder().build()
-  val target = client.target(String.format(ITEMS_URL, steamKey))
+  val target = client.target(String.format(Constants.RestItemsUrl, steamKey))
   val response = target.request().get()
 
   val mapper = new ObjectMapper()
@@ -75,7 +68,7 @@ def getGameItems: List[Item] = {
 
   def getGameHeroes: List[Hero] = {
     val client = ClientBuilder.newBuilder().build()
-    val target = client.target(String.format(HEROES_URL, steamKey))
+    val target = client.target(String.format(Constants.RestHeroesUrl, steamKey))
     val response = target.request().get()
 
     val mapper = new ObjectMapper()
@@ -87,7 +80,7 @@ def getGameItems: List[Item] = {
 
   def getHeroAbilities: List[Ability] = {
     val client = ClientBuilder.newBuilder().build()
-    val target = client.target(ABILITIES_URL)
+    val target = client.target(Constants.RestAbilitiesUrl)
     val response = target.request().get()
 
     val mapper = new ObjectMapper()
