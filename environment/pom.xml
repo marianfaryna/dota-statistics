@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>environment</artifactId>
+    <packaging>pom</packaging>
 
     <build>
         <plugins>
@@ -19,24 +20,27 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>prepare-sh</id>
-                        <phase>prepare-package</phase>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target>
-                                <copy todir="${basedir}/target/mongo">
+                            <tasks>
+                                <mkdir dir="${project.basedir}/../scripts"/>
+                                <mkdir dir="${project.basedir}/../scripts/mongo"/>
+                                <mkdir dir="${project.basedir}/../scripts/spark"/>
+                                <copy todir="${project.basedir}/../scripts/mongo">
                                     <fileset dir="${basedir}/src/main/bin/mongo" includes="*" />
                                 </copy>
-                                <copy todir="${basedir}/target/spark">
+                                <copy todir="${project.basedir}/../scripts/spark">
                                     <fileset dir="${basedir}/src/main/bin/spark" includes="*" />
                                 </copy>
-                                <chmod file="${basedir}/target/mongo/build-mongo.sh" perm="ugo+rx" />
-                                <chmod file="${basedir}/target/mongo/run-mongo.sh" perm="ugo+rx" />
-                                <chmod file="${basedir}/target/mongo/run-mongoimport.sh" perm="ugo+rx" />
-                                <chmod file="${basedir}/target/spark/start-spark-server.sh" perm="ugo+rx" />
-                            </target>
+                                <chmod file="${project.basedir}/../scripts/mongo/build-mongo.sh" perm="ugo+rx" />
+                                <chmod file="${project.basedir}/../scripts/mongo/run-mongo.sh" perm="ugo+rx" />
+                                <chmod file="${project.basedir}/../scripts/mongo/run-mongoimport.sh" perm="ugo+rx" />
+                                <chmod file="${project.basedir}/../scripts/spark/start-spark-server.sh" perm="ugo+rx" />
+                            </tasks>
                         </configuration>
                     </execution>
                 </executions>
