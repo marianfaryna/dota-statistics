@@ -1,12 +1,12 @@
 FROM alpine:latest
 
 ARG GlibcVersion=2.25-r0
-ARG SparkVersion=2.1.1
+ARG SparkVersion=2.2.0
 ARG HadoopVersion=2.7
 ARG JavaVersion=8
-ARG JavaUpdate=131
-ARG JavaBuild=11
-ARG JavaSig=d54c1d3a095b4ff2b6607d096fa80163
+ARG JavaUpdate=144
+ARG JavaBuild=01
+ARG JavaSig=090f390dda5b47b9b721c7dfaa008135
 
 ENV JAVA_ZIP_NAME=jre-${JavaVersion}u${JavaUpdate}-linux-x64
 ENV JAVA_URL=http://download.oracle.com/otn-pub/java/jdk/${JavaVersion}u${JavaUpdate}-b${JavaBuild}/${JavaSig}/${JAVA_ZIP_NAME}.tar.gz
@@ -20,8 +20,6 @@ RUN \
     #Spark uses nohup command with specific arguments ( -- ) that doesn't exist in busybox
     apk add --no-cache coreutils && \
     apk add --no-cache vim && \
-    #For starting spark process
-    apk add --no-cache supervisor && \
     apk add --no-cache bash && \
     apk add --no-cache curl && \
     # download packages for glibc, see https://github.com/sgerrand/alpine-pkg-glibc for more info

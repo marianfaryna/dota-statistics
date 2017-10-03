@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>environment</module>
         <module>engine</module>
         <module>rest-client</module>
         <module>web-app</module>
