@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+./spark-submit --class com.dota.engine.GameModeApplication --master local[*] --conf 'spark.driver.extraJavaOptions=-Dmongo.host=localhost -Dmongo.db.name=local -Dmongo.read.collection=test_collection -Dmongo.write.collection=test_results' engine-1.0-SNAPSHOT-jar-with-dependencies.jar

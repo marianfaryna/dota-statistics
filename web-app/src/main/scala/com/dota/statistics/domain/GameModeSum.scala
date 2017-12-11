@@ -9,23 +9,15 @@ import org.springframework.data.mongodb.core.mapping.Document
 /**
   * Match Mongo document
   */
-@Document(collection="test_collection")
-class Match {
+@Document(collection="test_results")
+class GameModeSum {
 
   @Id
   @JsonProperty
   var id : String = _
   @JsonProperty
-  var radiantWin : Boolean = _
-  @JsonProperty
-  var duration : Long = _
-  @JsonProperty
-  var startTime : Long = _
-  @JsonProperty
   var gameMode : Int = _
   @JsonProperty
-  var direScore : Int = _
-  @JsonProperty
-  var players : util.List[Player] = _
+  var sum : Int = _
 
 }

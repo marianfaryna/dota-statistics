@@ -1,6 +1,7 @@
 package com.dota.statistics.repository
 
-import com.dota.statistics.domain.Match
+import com.dota.statistics.domain.GameModeSum
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Component
 
@@ -8,4 +9,4 @@ import org.springframework.stereotype.Component
   * repository layer for Match documents
   */
 @Component
-trait MatchRepository extends MongoRepository[Match, String]
+trait GameModeSumRepository extends MongoRepository[GameModeSum, ObjectId]

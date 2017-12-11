@@ -1,16 +1,24 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
+import {Response, Http} from "@angular/http";
+import "rxjs/add/operator/toPromise";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class DataService {
-  getHeroNames(): String[] {
-    return ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  private restGameModeSumsUrl = 'http://localhost:8080/game-mods-data';
+  private restGameModesUrl = 'http://localhost:8080/game-mods';
+
+  constructor(private http:Http) {
   }
 
-  getHeroDataSet(): Array<any> {
-    return [
-      {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-      {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-      {data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
-    ];
+  //returns json array of data as Observable
+  getGameModesData():Observable<Response> {
+    return this.http.get(this.restGameModeSumsUrl);
   }
+
+  // return chart labels sorted according to data as Observable
+  getGameModesLabels():Observable<Response> {
+    return this.http.get(this.restGameModesUrl);
+  }
+
 }

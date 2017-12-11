@@ -13,50 +13,39 @@ var app_data_service_1 = require("./app.data.service");
 var AppComponent = (function () {
     function AppComponent(dataService) {
         this.dataService = dataService;
-        // lineChart
-        this.lineChartData = this.dataService.getHeroDataSet();
-        this.lineChartLabels = this.dataService.getHeroNames();
-        this.lineChartOptions = {
+        // bar chart
+        this.barChartData = [{ "data": [], "label": "Matches Played" }];
+        this.barChartType = 'bar';
+        this.barChartLabels = this.getChartLabels();
+        this.barChartOptions = {
+            scaleShowVerticalLines: false,
             responsive: true
         };
-        this.lineChartColors = [
-            {
-                backgroundColor: 'rgba(148,159,177,0.2)',
-                borderColor: 'rgba(148,159,177,1)',
-                pointBackgroundColor: 'rgba(148,159,177,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-            },
-            {
-                backgroundColor: 'rgba(77,83,96,0.2)',
-                borderColor: 'rgba(77,83,96,1)',
-                pointBackgroundColor: 'rgba(77,83,96,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(77,83,96,1)'
-            },
-            {
-                backgroundColor: 'rgba(148,159,177,0.2)',
-                borderColor: 'rgba(148,159,177,1)',
-                pointBackgroundColor: 'rgba(148,159,177,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-            }
-        ];
-        this.lineChartLegend = true;
-        this.lineChartType = 'line';
+        this.barChartLegend = true;
     }
-    AppComponent.prototype.randomize = function () {
-        var _lineChartData = new Array(this.lineChartData.length);
-        for (var i = 0; i < this.lineChartData.length; i++) {
-            _lineChartData[i] = { data: new Array(this.lineChartData[i].data.length), label: this.lineChartData[i].label };
-            for (var j = 0; j < this.lineChartData[i].data.length; j++) {
-                _lineChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
+    //get actual data form DB via REST
+    AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.dataService.getGameModesData()
+            .subscribe(function (res) {
+            var actualResponse = res.json();
+            _this.barChartData = [];
+            for (var i = 0; i < actualResponse.length; i++) {
+                _this.barChartData.push(actualResponse[i].sum);
             }
-        }
-        this.lineChartData = _lineChartData;
+        });
+    };
+    //returns array of labels for chart based on sorted data
+    AppComponent.prototype.getChartLabels = function () {
+        var _this = this;
+        this.dataService.getGameModesLabels()
+            .subscribe(function (res) {
+            var actualResponse = res.json();
+            _this.barChartLabels = [];
+            for (var i = 0; i < actualResponse.length; i++) {
+                _this.barChartLabels.push(actualResponse[i]);
+            }
+        });
     };
     // events
     AppComponent.prototype.chartClicked = function (e) {
