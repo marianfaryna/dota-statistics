@@ -1,7 +1,7 @@
 package com.dota.rest.entity.matches
 
 /**
-  * Created by admin on 3/18/17.
+  * Object to get all matches as response result
   */
 class Result {
   var status : Long = 0L

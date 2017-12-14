@@ -1,7 +1,7 @@
 package com.dota.rest.entity.heroes
 
 /**
-  * Created by admin on 3/25/17.
+  * Object to get all heroes as response result
   */
 class HeroesResult {
   var status : Long = 0L

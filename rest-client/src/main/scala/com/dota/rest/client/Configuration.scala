@@ -24,10 +24,22 @@ object Configuration {
 
   val configuration : Properties = loadConfiguration()
 
+  /**
+    * returns value from configuration by provided key
+    *
+    * @param key property name
+    * @return value by provided key as String
+    */
   def getValue(key : String) : String = {
     configuration.getProperty(key)
   }
 
+  /**
+    * returns numeric value from configuration by provided key
+    *
+    * @param key property name
+    * @return value by provided key as numeric value
+    */
   def getIntValue(key : String) : Int = {
     getValue(key).toInt
   }

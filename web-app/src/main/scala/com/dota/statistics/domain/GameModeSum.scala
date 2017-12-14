@@ -2,22 +2,22 @@ package com.dota.statistics.domain
 
 import java.util
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 /**
-  * Match Mongo document
+  * Game Mode sum Mongo document
   */
-@Document(collection="test_collection")
-class Match {
+@Document(collection="test_results")
+class GameModeSum {
 
   @Id
+  @JsonProperty
   var id : String = _
-  var radiantWin : Boolean = _
-  var duration : Long = _
-  var startTime : Long = _
+  @JsonProperty
   var gameMode : Int = _
-  var direScore : Int = _
-  var players : util.List[Player] = _
+  @JsonProperty
+  var sum : Int = _
 
 }

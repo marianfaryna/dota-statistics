@@ -4,7 +4,7 @@ import com.dota.rest.entity.Player
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
-  * Created by admin on 3/18/17.
+  * DOTA Match entity
   */
 class Match {
   @JsonProperty("match_id")
