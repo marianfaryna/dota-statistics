@@ -1,7 +1,7 @@
 package com.dota.rest.entity.matches
 
 /**
-  * Created by admin on 3/18/17.
+  * general response object for REST calls
   */
 class Response {
 var result: Result = new Result

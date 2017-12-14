@@ -3,7 +3,7 @@ package com.dota.rest.entity
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
-  * Created by admin on 3/18/17.
+  * Player info entity
   */
 class Player {
   @JsonProperty("account_id")

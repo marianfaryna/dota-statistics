@@ -2,12 +2,19 @@ package com.dota.rest.client
 
 class Main {}
 
+/**
+  * Program entry point
+  */
 object Main extends App {
   val DotaKey = Configuration.getValue("rest.dota.key")
 
   val client = RestClient
   val dataHandler = DataHandler
   client.steamKey = DotaKey
+
+  if(client.steamKey.isEmpty) {
+    throw new RuntimeException("No Steam WEBAPI key provided")
+  }
 
   var counter: Int = 0
 

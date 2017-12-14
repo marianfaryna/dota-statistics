@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 /**
-  * Match Mongo document
+  * Game Mode sum Mongo document
   */
 @Document(collection="test_results")
 class GameModeSum {

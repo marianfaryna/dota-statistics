@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Component
 
 /**
-  * repository layer for Match documents
+  * repository layer for game mode sums documents
   */
 @Component
 trait GameModeSumRepository extends MongoRepository[GameModeSum, ObjectId]

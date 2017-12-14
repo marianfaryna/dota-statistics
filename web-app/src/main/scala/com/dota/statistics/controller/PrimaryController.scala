@@ -22,6 +22,11 @@ class PrimaryController @Autowired()(private val gameModeSumRepository: GameMode
 
   var mapper = new ObjectMapper()
 
+  /**
+    * returns data related to calculated game mode played matches
+    *
+    * @return calculated game mods as JSON
+    */
   @RequestMapping(Array("/game-mods-data"))
   @ResponseBody
   def getGameModsData: String = {
@@ -32,6 +37,11 @@ class PrimaryController @Autowired()(private val gameModeSumRepository: GameMode
     mapper.writer().writeValueAsString(gameModeSums)
   }
 
+  /**
+    * return existent game modes
+    *
+    * @return existent game mods as JSON array of strings
+    */
   @RequestMapping(Array("/game-mods"))
   @ResponseBody
   def getGameModes: String = {

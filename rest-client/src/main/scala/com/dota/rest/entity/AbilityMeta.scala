@@ -1,7 +1,7 @@
 package com.dota.rest.entity
 
 /**
-  * Created by admin on 3/20/17.
+  * Ability metadata entity
   */
 class AbilityMeta {
 var ability : Long = 0L

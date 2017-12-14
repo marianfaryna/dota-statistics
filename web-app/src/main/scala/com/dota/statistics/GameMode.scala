@@ -29,6 +29,12 @@ object GameMode extends Enumeration {
   val RANKED_MATCHMAKING = Value(22, "Ranked Matchmaking")
   val UNKNOWN = Value(999, "Unidentified match mode")
 
+  /**
+    * retunr game mode name by id
+    *
+    * @param gameMode id of game mode
+    * @return string representation of game mode
+    */
   def getByModeId(gameMode : Int): GameMode = {
     for(mode <- GameMode.values) {
       if(gameMode == mode.id) {

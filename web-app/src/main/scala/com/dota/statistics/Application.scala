@@ -10,6 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class Application {
 }
 
+/**
+  * Main application object
+  */
 object Application extends App {
   SpringApplication.run(classOf[Application], args:_*)
 }

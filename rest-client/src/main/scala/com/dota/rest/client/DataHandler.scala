@@ -1,6 +1,5 @@
 package com.dota.rest.client
 
-import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 import com.dota.rest.entity.Player
@@ -12,8 +11,10 @@ import org.mongodb.scala.model.Filters._
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-class DataHandler(configuration: Properties) {}
-
+/**
+  * Class responsible for persisting data into MongoDB
+  *
+  */
 object DataHandler {
   val client: MongoClient = MongoClient(Configuration.getValue(Configuration.MongoUrl)) //the actual host name of parent machine
 
@@ -21,7 +22,13 @@ object DataHandler {
   val collection: MongoCollection[Document] = database.getCollection(Configuration.getValue(Configuration.MongoCollection))
   val callbackDuration : Int = Configuration.getIntValue(Configuration.MongoCallBackDuration)
 
-  def prepareDocument(matchToPersist: Match): Document = {
+  /**
+    * Creates MongoDB Document object for match data
+    *
+    * @param matchToPersist match metadata
+    * @return MongoDB document ready to persist
+    */
+  def prepareMatchDocument(matchToPersist: Match): Document = {
     Document(DocumentSchema.Id -> matchToPersist.matchId,
       DocumentSchema.RadiantWin -> matchToPersist.radiantWin,
       DocumentSchema.Duration -> matchToPersist.duration,
@@ -31,6 +38,12 @@ object DataHandler {
       DocumentSchema.Players -> preparePlayersDocument(matchToPersist.players))
   }
 
+  /**
+    * Creates MongoDB Document object for list of players
+    *
+    * @param players players object metadata
+    * @return MongoDB document ready to persist
+    */
   def preparePlayersDocument(players: List[Player]): List[Document] = {
     var playersList = List[Document]()
     for (player <- players) {
@@ -54,12 +67,17 @@ object DataHandler {
     playersList
   }
 
+  /**
+    * Converts Match into MongoDB document and persist it into DB
+    *
+    * @param matchToPersist Match object data
+    */
   def put(matchToPersist: Match): Unit = {
     val findObservable = collection.find(equal(DocumentSchema.Id, matchToPersist.matchId)).first()
 
     val foundDocument = Await.result(findObservable.toFuture(), Duration(callbackDuration, TimeUnit.SECONDS))
     if(foundDocument.isEmpty) {
-      val documentToPersist = prepareDocument(matchToPersist)
+      val documentToPersist = prepareMatchDocument(matchToPersist)
       val insertObservable = collection.insertOne(documentToPersist)
       Await.result(insertObservable.toFuture(), Duration(callbackDuration, TimeUnit.SECONDS))
     }
